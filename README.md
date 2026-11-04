@@ -9,7 +9,7 @@ A skill for Claude that turns a folder of footage, or just a brief, into a finis
 - **Proposes 2-3 new themes** with concrete gags, then waits for your choice.
 - **Edits with intent.** A hook in the first seconds, cuts on the beat, callbacks, word-by-word captions, and a sound for each graphic.
 - **Renders and checks.** Audio and video stay equal in length, text is checked for size and position, QR codes are decoded from rendered frames.
-- **Delivers everything you need to post.** The video, a no-music version, and text for the post, for groups and for private messages.
+- **Delivers everything you need to post.** The video, a no-music version, and text for the post, for groups and for private messages. In Claude Code the files go straight into your folder. In the Claude app they arrive in the chat.
 
 <img src="assets/workflow.png" alt="The workflow in eight steps: brief, inventory, story, theme, music, sample, check, deliver. Theme and sample are highlighted because they wait for your decision." width="100%">
 
@@ -31,7 +31,21 @@ cp -r video-dna/video-dna ~/.claude/skills/video-dna
 Then install the requirements:
 
 - [ffmpeg](https://ffmpeg.org/) built with libass
-- `pip install numpy opencv-python pillow faster-whisper`
+- `python ~/.claude/skills/video-dna/scripts/setup_tools.py --profile core`
+- `python ~/.claude/skills/video-dna/scripts/setup_tools.py --profile transcribe`
+
+## Tools
+
+The core needs only ffmpeg and numpy. `setup_tools.py --list` shows the rest, and `--profile all` installs everything.
+
+| Profile | Tools | Used for |
+|---|---|---|
+| `core` | numpy, OpenCV, Pillow | Mixing, sound effects, frame sheets, QR checks, faces |
+| `transcribe` | faster-whisper | Whisper transcription |
+| `whisper-alt` | openai-whisper | Original Whisper; whisper.cpp and the OpenAI API also work |
+| `vision` | PySceneDetect, rembg | Finding cuts, cutting out people and objects |
+| `graphics` | qrcode, fontTools, Playwright, OpenTimelineIO | QR codes, font checks, HTML scenes, export to other editors |
+| `audio` | librosa, pyloudnorm, Demucs, Piper | Beats, loudness, voice and music separation, voiceover |
 
 ### Claude app
 
@@ -58,6 +72,7 @@ Run `python scripts/doctor.py` from the skill folder to see what your environmen
 |---|---|---|
 | Runs on | Your computer | A cloud sandbox |
 | Your files | Direct access | Uploaded or from a connected folder |
+| Finished videos | Written directly to your folder | Delivered directly in the chat |
 | Internet | Yours | May be restricted |
 | Big files | No limit from the skill | Transfers to your computer may be limited; it can compress or split |
 | Transcription | Downloads the Whisper model on first use | Works if the model can be reached; otherwise you upload a transcript made on your computer |
@@ -76,6 +91,8 @@ python tests/test_pipeline.py
 ```
 
 This builds a video from generated test media and checks rendering, captions, sound, beat detection, QR decoding and file-size tools. It needs ffmpeg, numpy and opencv-python. Transcription is not part of this test, because it needs a model download.
+
+`python tests/test_tools.py` tests the optional tools and skips any that aren't installed.
 
 ## License
 

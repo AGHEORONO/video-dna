@@ -25,8 +25,8 @@ Paths are relative to the JSON file.
   "duck_db": -10,
   "ass": "graphics.ass",
   "fontsdir": "fonts",
-  "out": "final.mp4",
-  "no_music_out": "final_no_music.mp4",
+  "out": "output/final.mp4",
+  "no_music_out": "output/final_no_music.mp4",
   "loudness": -14
 }
 ```
@@ -70,7 +70,7 @@ Vector box:
 
 ASS colors are `&HBBGGRR&`, and alpha `00` is opaque. Draw boxes on a lower `Layer` than their text. Size each box from the real text width: measure it with Pillow using the same font, because boxes guessed by eye are how text ends up escaping borders.
 
-For anything ASS cannot do well (photo collages, cut-outs, 3D tilts, particles), render a transparent PNG sequence or short clip with Pillow and numpy, then overlay it through the segment's `vf` or pre-render it as its own clip. Remotion is a good option in Claude Code when a scene needs complex layout.
+For anything ASS cannot do well (photo collages, cut-outs, 3D tilts, particles), render a transparent PNG sequence or short clip with Pillow and numpy, then overlay it through the segment's `vf` or pre-render it as its own clip. HTML scenes through `toolbox.py html-seq` and Remotion are good options when a scene needs complex layout. See `references/tools.md`.
 
 ## Motion on footage
 

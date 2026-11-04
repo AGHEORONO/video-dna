@@ -14,7 +14,7 @@ Reply in the user's language. Captions and on-screen text use the language of th
 1. Run `python scripts/doctor.py` to see what this environment can do. Read `references/environments.md` if anything is missing, or if you are in a cloud sandbox.
 2. Look at the working folder, then read `references/brief.md` and collect the brief. Ask only what the request and the material do not already answer.
 3. Read `references/formats.md` and use the recipe closest to the request. If there is no material, follow "No material" in `references/brief.md`.
-4. Read `references/pipeline.md` before building the timeline.
+4. Read `references/pipeline.md` before building the timeline, and `references/tools.md` when a job needs more than the core scripts.
 
 ## Workflow
 
@@ -27,7 +27,14 @@ Do these in order. Do not render anything before step 5.
 4. **Music.** Propose one track per section with a target filename, and ask the user to put the files in the folder. A name such as `2_chorus_0m45s.mp3` means "start at 0:45". Never download commercial music, even if asked. Offer generated sound and a no-music version instead.
 5. **Sample first.** For anything over about 45 seconds, render one short chapter so the user can judge direction. Then build the rest.
 6. **Check.** Run `scripts/qa.py`, look at extracted frames and go through `references/qa-checklist.md`. Fix what you find before delivering.
-7. **Deliver.** Hand over the files, a no-music version when useful, and ready-to-paste text from `references/copy.md`. Include the honest report below.
+7. **Deliver.** See "Where the finished video goes" below. Include a no-music version when useful, ready-to-paste text from `references/copy.md`, and the honest report.
+
+## Where the finished video goes
+
+`scripts/doctor.py` reports the environment. Finish every video this way:
+
+- **Claude Code:** write finished videos directly into the user's folder, in `output/` inside the working folder unless they name another place. Give the full paths. The user should never have to go looking in `_work/`.
+- **Claude app:** deliver finished videos directly in the chat, as files the user can open and download from the conversation. Copy them to the outputs folder (`/mnt/user-data/outputs` when it exists) and use the file-sharing tool if one is available. Do not stop at a sandbox path, and do not shrink or split a file unless it fails to deliver.
 
 ## The DNA
 
@@ -74,6 +81,8 @@ You cannot hear audio or watch in real time. State this every time, in plain wor
 | `scripts/beats.py` | Tempo, beat times and strongest hits of a track |
 | `scripts/sfx.py` | Generate copyright-free sound effects |
 | `scripts/music.py` | Generate a simple original chiptune or pulse music bed that loops |
+| `scripts/setup_tools.py` | Check and install optional tools by profile, and save Whisper models |
+| `scripts/toolbox.py` | Scene detection, cutouts, faces, QR, fonts, HTML scenes, stems, voiceover, loudness, timeline export |
 | `scripts/render.py` | Timeline JSON to final MP4, with an optional no-music version |
 | `scripts/qa.py` | Duration, format, size, loudness, ASS and QR checks |
 | `scripts/fit_size.py` | Compress to a target size, or split for transfer |
@@ -81,6 +90,7 @@ You cannot hear audio or watch in real time. State this every time, in plain wor
 | `references/formats.md` | Recipes per type of video |
 | `references/themes.md` | How to find a theme, with worked examples |
 | `references/pipeline.md` | Timeline format, render rules, ASS animation recipes |
+| `references/tools.md` | Which tool for which need, including Whisper backends |
 | `references/environments.md` | Claude Code and Claude app differences |
 | `references/qa-checklist.md` | Pre-delivery checks |
 | `references/copy.md` | Post captions and shareable messages |
